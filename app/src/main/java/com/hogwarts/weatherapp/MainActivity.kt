@@ -6,19 +6,18 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.hogwarts.weatherapp.adapters.WiFiDisplayAdapter
 import com.hogwarts.weatherapp.models.ViewModel
 import com.hogwarts.weatherapp.models.WiFi
 import kotlinx.android.synthetic.main.user_map.*
-import java.util.ArrayList
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
         @RequiresApi(Build.VERSION_CODES.M)
         override fun onReceive(context: Context, intent: Intent) {
             val results = wifiManager.scanResults
-            Log.i("test", "Response: $results")
 
             unregisterReceiver(this)
             for (scanResult in results) {
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        startActivity(Intent(this,UserMap::class.java))
+        startActivity(Intent(this, UserMap::class.java))
         unregisterReceiver(wifiReceiver)
         finish()
     }
@@ -107,5 +105,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

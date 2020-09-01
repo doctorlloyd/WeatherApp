@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/wifi_card_view"
+    android:id="@+id/weather_card_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     card_view:cardBackgroundColor="@android:color/transparent"
-
     card_view:cardCornerRadius="10dp"
     card_view:cardElevation="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:background="@drawable/transparent_background"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content">
 
             <TextView
-                style="@style/labels"
+                style="@style/freeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name" />
+                android:text="@string/weather" />
 
             <TextView
-                android:id="@+id/wifi_name"
-                style="@style/freeText"
+                android:id="@+id/weather_name"
+                style="@style/standardText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wifi_name" />
@@ -35,17 +36,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content">
 
             <TextView
-                style="@style/labels"
+                style="@style/freeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/address" />
+                android:text="@string/icon" />
 
             <TextView
-                android:id="@+id/wifi_address"
-                style="@style/freeText"
+                android:id="@+id/weather_address"
+                style="@style/standardText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wifi_name" />
@@ -53,35 +55,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content">
 
             <TextView
-                style="@style/labels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/strength" />
-
-            <TextView
-                android:id="@+id/wifi_strength"
                 style="@style/freeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/wifi_strength" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:text="@string/description" />
 
             <TextView
-                style="@style/labels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/capabilities" />
-
-            <TextView
-                android:id="@+id/wifi_capabilities"
-                style="@style/freeText"
+                android:id="@+id/weather_capabilities"
+                style="@style/standardText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wifi_capabilities" />
@@ -89,17 +74,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content">
 
             <TextView
-                style="@style/labels"
+                style="@style/freeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/venue_name" />
+                android:text="@string/forecast_id" />
 
             <TextView
-                android:id="@+id/wifi_venueName"
-                style="@style/freeText"
+                android:id="@+id/weather_venueName"
+                style="@style/standardText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/venue_name" />

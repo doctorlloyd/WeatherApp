@@ -1,54 +1,43 @@
 package com.hogwarts.weatherapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.hogwarts.weatherapp.DisplayScreen
 import com.hogwarts.weatherapp.R
 import com.hogwarts.weatherapp.models.ViewModel
 import com.hogwarts.weatherapp.models.Weather
 
-class WeatherDisplayAdapter (private val context: Context, private val weather: List<Weather>) :
+class WeatherDisplayAdapter (private val weather: List<Weather>) :
     RecyclerView.Adapter<WeatherDisplayAdapter.ViewHolder>() {
-    private val model = ViewModel(context)
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var wifiName: TextView = itemView.findViewById(R.id.wifi_name)
-        var wifiAddress: TextView = itemView.findViewById(R.id.wifi_address)
-        var wifiCapabilities: TextView = itemView.findViewById(R.id.wifi_capabilities)
-        var wifiStrength: TextView = itemView.findViewById(R.id.wifi_strength)
-        var wifiVenueName: TextView = itemView.findViewById(R.id.wifi_venueName)
-        var wifiCardView: CardView = itemView.findViewById(R.id.wifi_card_view)
-
-        init {
-//            wifiCardView.setOnClickListener { view: View ->
-//                val intent = Intent(context, DisplayScreen::class.java)
-//                intent.putExtra("selected", weather[adapterPosition])
-//                view.context.startActivity(intent)
-//            }
-        }
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var weatherName: TextView = itemView.findViewById(R.id.weather_name)
+        var weatherAddress: TextView = itemView.findViewById(R.id.weather_address)
+        var weatherCapabilities: TextView = itemView.findViewById(R.id.weather_capabilities)
+        var weatherVenueName: TextView = itemView.findViewById(R.id.weather_venueName)
     }
 
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
-    ): WeatherDisplayAdapter.ViewHolder {
+    ): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.weather_card, viewGroup, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: WeatherDisplayAdapter.ViewHolder, position: Int) {
-        val wifi = weather[position]
-//        viewHolder.wifiName.text = wifi.name
-//        viewHolder.wifiAddress.text = wifi.address
-//        viewHolder.wifiCapabilities.text = wifi.capabilities
-//        viewHolder.wifiStrength.text = model.signalCheck(wifi.strength)
-//        viewHolder.wifiVenueName.text = wifi.venueName
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        val weather = weather[position]
+        viewHolder.weatherName.text = weather.main
+        viewHolder.weatherAddress.text = weather.icon
+        viewHolder.weatherCapabilities.text = weather.description
+        viewHolder.weatherVenueName.text = weather.id.toString()
     }
 
     override fun getItemCount(): Int {

@@ -26,8 +26,8 @@ class WiFiDisplayAdapter (private val context: Context, private val WIFIs: List<
         var wifiCapabilities: TextView = itemView.findViewById(R.id.wifi_capabilities)
         var wifiStrength: TextView = itemView.findViewById(R.id.wifi_strength)
         var wifiVenueName: TextView = itemView.findViewById(R.id.wifi_venueName)
-        var wifiCardView: CardView = itemView.findViewById(R.id.wifi_card_view)
-        var wifiButton: Button = itemView.findViewById(R.id.submit_wifi_info)
+        private var wifiCardView: CardView = itemView.findViewById(R.id.wifi_card_view)
+        private var wifiButton: Button = itemView.findViewById(R.id.submit_wifi_info)
 
         init {
             wifiButton.setOnClickListener {

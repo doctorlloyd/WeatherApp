@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.weather.*
 import java.net.URL
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 
@@ -37,33 +38,37 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
     private val API_KEY = "ac8112a61cde5064a3cffb756e6195f7"
     private lateinit var arrayList: ArrayList<Weather>
     private lateinit var _adapter: WeatherDisplayAdapter
-
+    private lateinit var list: ArrayList<Location>
+    private var clicked = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.userapp)
         context = this
         arrayList = ArrayList()
+        list = ArrayList()
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         getLocation()
-
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
     }
 
-    fun setLocation(lat: Double, lng: Double, cityName:String){
-        val location = LatLng(lat, lng)
-        mMap.addMarker(MarkerOptions().position(location).title(cityName))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12F))
+    fun setLocation(cityName: String, list: ArrayList<Location>) {
+        Log.i("test", "Response: ${list.size}")
+        for (loc in list) {
+            val location = LatLng(loc.latitude, loc.longitude)
+            mMap.addMarker(MarkerOptions().position(location).title(cityName))
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12F))
+        }
     }
 
     private fun getLocation() {
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
-        val locationListener = object : LocationListener{
+        val locationListener = object : LocationListener {
             @SuppressLint("SetTextI18n")
             override fun onLocationChanged(location: Location?) {
                 val latitude = location!!.latitude
@@ -74,19 +79,26 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
 
                 val url = "https://api.openweathermap.org/data/2.5/weather?zip=" +
                         "${addresses[0].postalCode},${addresses[0].countryCode}&appid=$API_KEY"
-
-                setLocation(latitude, longitude, addresses[0].getAddressLine(0))
+                if (clicked)
+                    list.add(location)
+                clicked = false
+                setLocation(addresses[0].getAddressLine(0), list)
 
                 val gson = Gson()
                 thread {
-                    val jsonStr = try { URL(url).readText() } catch (ex: Exception) { return@thread }
+                    val jsonStr = try {
+                        URL(url).readText()
+                    } catch (ex: Exception) {
+                        return@thread
+                    }
                     runOnUiThread {
                         val testModel = gson.fromJson(jsonStr, LocationWeather::class.java)
-                        weather.text = "${testModel.weather[0].main}. \nMax temp: ${testModel.main.temp_max}. \nWind speed: ${testModel.wind.speed}."
+                        weather.text =
+                            "${testModel.weather[0].main}. \nMax temp: ${testModel.main.temp_max}. \nWind speed: ${testModel.wind.speed}."
                         weather_description.text = "Type: ${testModel.weather[0].description}."
                         weather_icon.text = testModel.name
 
-                        _adapter = WeatherDisplayAdapter(context, testModel.weather)
+                        _adapter = WeatherDisplayAdapter(testModel.weather)
                         list_item.adapter = _adapter
                     }
                 }
@@ -103,7 +115,8 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
 
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -140,8 +153,13 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.network -> {
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
+            true
+        }
+        R.id.add_location -> {
+            clicked = true
+            getLocation()
             true
         }
         else -> {

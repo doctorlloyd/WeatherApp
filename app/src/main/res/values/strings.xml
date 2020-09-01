@@ -14,4 +14,9 @@
     <string name="venue_name">Venue Name:</string>
     <string name="submit_list">Submit List</string>
     <string name="network">Network</string>
+    <string name="pin_location">Pin Location</string>
+    <string name="weather">Weather:</string>
+    <string name="icon">Icon:</string>
+    <string name="description">Description:</string>
+    <string name="forecast_id">Forecast ID:</string>
 </resources>
