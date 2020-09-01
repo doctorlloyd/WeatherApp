@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "875509230692",
+    "firebase_url": "https://weather-application-f3843.firebaseio.com",
+    "project_id": "weather-application-f3843",
+    "storage_bucket": "weather-application-f3843.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875509230692:android:dab1a6629c28b78f48c371",
+        "android_client_info": {
+          "package_name": "com.hogwarts.weatherapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875509230692-pf3plaa5gs7arbqtunqq6ee8nh2vubrs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hogwarts.weatherapp",
+            "certificate_hash": "6ff36232c0d77764808f4f30ed033706e938ce78"
+          }
+        },
+        {
+          "client_id": "875509230692-u5p24pi3trt3k5ts9466ujau13mh6qu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChnk_i-uOcstOu7IaBR6AZRo2wFaaI1iY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875509230692-u5p24pi3trt3k5ts9466ujau13mh6qu9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
