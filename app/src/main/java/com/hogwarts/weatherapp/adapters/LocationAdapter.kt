@@ -1,20 +1,17 @@
 package com.hogwarts.weatherapp.adapters
 
-import android.content.Context
-import android.content.Intent
+import android.location.Address
+import android.location.Location
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.hogwarts.weatherapp.DisplayScreen
 import com.hogwarts.weatherapp.R
-import com.hogwarts.weatherapp.models.ViewModel
 import com.hogwarts.weatherapp.models.Weather
 
-class WeatherDisplayAdapter (private val weather: List<Weather>) :
-    RecyclerView.Adapter<WeatherDisplayAdapter.ViewHolder>() {
+class LocationAdapter (private val locations: List<Address>) :
+    RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var weatherName: TextView = itemView.findViewById(R.id.weather_name)
@@ -33,14 +30,14 @@ class WeatherDisplayAdapter (private val weather: List<Weather>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val weather = weather[position]
-        viewHolder.weatherName.text = weather.main
-        viewHolder.weatherAddress.text = weather.icon
-        viewHolder.weatherCapabilities.text = weather.description
-        viewHolder.weatherVenueName.text = weather.id.toString()
+        val location = locations[position]
+        viewHolder.weatherName.text = location.countryName
+        viewHolder.weatherAddress.text = location.adminArea
+        viewHolder.weatherCapabilities.text = location.locality
+        viewHolder.weatherVenueName.text = location.featureName
     }
 
     override fun getItemCount(): Int {
-        return weather.size
+        return locations.size
     }
 }

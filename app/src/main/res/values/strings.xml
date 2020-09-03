@@ -2,7 +2,7 @@
     <string name="app_name">Weather App</string>
     <string name="title_activity_user_map">Current Weather</string>
     <string name="testing">Testing the layout</string>
-    <string name="scan_wifi">Scan WiFi</string>
+    <string name="scan_wifi">Scan for Network</string>
     <string name="wifi_info">Submit WiFi Info</string>
     <string name="name">Name:</string>
     <string name="address">Address:</string>
@@ -15,8 +15,9 @@
     <string name="submit_list">Submit Network List</string>
     <string name="network">Network</string>
     <string name="pin_location">Pin Location</string>
-    <string name="weather">Weather:</string>
-    <string name="icon">Icon:</string>
-    <string name="description">Description:</string>
-    <string name="forecast_id">Forecast ID:</string>
+    <string name="weather">Country: </string>
+    <string name="icon">Province: </string>
+    <string name="description">City/Town: </string>
+    <string name="forecast_id">Feature Name: </string>
+    <string name="home">Home</string>
 </resources>

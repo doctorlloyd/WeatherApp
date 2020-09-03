@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,9 +21,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
-import com.hogwarts.weatherapp.adapters.WeatherDisplayAdapter
+import com.hogwarts.weatherapp.adapters.LocationAdapter
 import com.hogwarts.weatherapp.models.LocationWeather
-import com.hogwarts.weatherapp.models.Weather
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.weather.*
 import java.net.URL
@@ -36,8 +36,8 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var context: Context
     private val API_KEY = "ac8112a61cde5064a3cffb756e6195f7"
-    private lateinit var arrayList: ArrayList<Weather>
-    private lateinit var _adapter: WeatherDisplayAdapter
+    private lateinit var arrayList: ArrayList<Address>
+    private lateinit var _adapter: LocationAdapter
     private lateinit var list: ArrayList<Location>
     private var clicked = true
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,13 +57,13 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
     }
 
-    fun setLocation(cityName: String, list: ArrayList<Location>) {
-        Log.i("test", "Response: ${list.size}")
+    fun setLocation(cityName: String, list: List<Address>) {
+
         for (loc in list) {
             val location = LatLng(loc.latitude, loc.longitude)
             mMap.addMarker(MarkerOptions().position(location).title(cityName))
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12F))
         }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(list[0].latitude,list[0].longitude), 10F))
     }
 
     private fun getLocation() {
@@ -75,14 +75,16 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                 val longitude = location.longitude
 
                 val geocoder = Geocoder(context, Locale.getDefault())
-                val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)
+                val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 10)
+
+                Log.i("test", "Response: ${addresses.size}")
 
                 val url = "https://api.openweathermap.org/data/2.5/weather?zip=" +
                         "${addresses[0].postalCode},${addresses[0].countryCode}&appid=$API_KEY"
                 if (clicked)
                     list.add(location)
                 clicked = false
-                setLocation(addresses[0].getAddressLine(0), list)
+                setLocation(addresses[0].getAddressLine(0), addresses)
 
                 val gson = Gson()
                 thread {
@@ -93,6 +95,7 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                     }
                     runOnUiThread {
                         val testModel = gson.fromJson(jsonStr, LocationWeather::class.java)
+                        if (testModel.weather[0].main.contains("cloud", true))
                             weather_icon.setImageDrawable(
                                 ContextCompat.getDrawable(
                                     context,
@@ -112,7 +115,7 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                         weather_description.text = "Type: ${testModel.weather[0].description}."
                         weather_city.text = testModel.name
 
-                        _adapter = WeatherDisplayAdapter(testModel.weather)
+                        _adapter = LocationAdapter(addresses)
                         list_item.adapter = _adapter
                     }
                 }
@@ -156,6 +159,7 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
             when (grantResults[0]) {
                 PackageManager.PERMISSION_GRANTED -> getLocation()
                 PackageManager.PERMISSION_DENIED -> {
+                    //Set location
                 }
             }
         }
@@ -174,6 +178,14 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
         R.id.add_location -> {
             clicked = true
             getLocation()
+            title = "Location History"
+            list_item_layout.visibility = View.VISIBLE
+            weather_card_layout.visibility = View.GONE
+            true
+        }
+        R.id.back_action_icon ->{
+            startActivity(Intent(this, UserMap::class.java))
+            finish()
             true
         }
         else -> {
