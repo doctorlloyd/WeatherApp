@@ -24,7 +24,7 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/weather_icon"
+                android:id="@+id/weather_city"
                 style="@style/freeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,14 +37,38 @@
                 android:layout_height="wrap_content"
                 android:text="@string/testing" />
         </androidx.appcompat.widget.LinearLayoutCompat>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/weather_icon"
+            android:layout_gravity="center|end"
+            android:src="@drawable/ic_action_upload"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/weather"
             style="@style/standardText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"
-            android:layout_weight="0.5"
             android:text="@string/testing" />
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/max_temp"
+            style="@style/standardText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="@string/testing" />
+        </LinearLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

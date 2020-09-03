@@ -93,10 +93,24 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                     }
                     runOnUiThread {
                         val testModel = gson.fromJson(jsonStr, LocationWeather::class.java)
-                        weather.text =
-                            "${testModel.weather[0].main}. \nMax temp: ${testModel.main.temp_max}. \nWind speed: ${testModel.wind.speed}."
+                            weather_icon.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.ic_action_cloud
+                                )
+                            )
+                        else if(testModel.weather[0].main.contains("sun", true))
+                            weather_icon.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.ic_action_sunny
+                                )
+                            )
+                        weather.text = testModel.weather[0].main
+                        max_temp.text =
+                            "Max temp: ${testModel.main.temp_max}. \nWind speed: ${testModel.wind.speed}."
                         weather_description.text = "Type: ${testModel.weather[0].description}."
-                        weather_icon.text = testModel.name
+                        weather_city.text = testModel.name
 
                         _adapter = WeatherDisplayAdapter(testModel.weather)
                         list_item.adapter = _adapter

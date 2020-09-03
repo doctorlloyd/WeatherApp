@@ -12,7 +12,7 @@
     <string name="capabilities">Capabilities:</string>
     <string name="wifi_capabilities">wifi_capabilities</string>
     <string name="venue_name">Venue Name:</string>
-    <string name="submit_list">Submit List</string>
+    <string name="submit_list">Submit Network List</string>
     <string name="network">Network</string>
     <string name="pin_location">Pin Location</string>
     <string name="weather">Weather:</string>
