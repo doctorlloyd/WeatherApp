@@ -21,5 +21,5 @@ interface Routes {
     ): Call<ResponseBody>
 
     @GET("https://api.openweathermap.org/data/2.5/weather")
-    fun getWeather(@HeaderMap headers: Map<String, String>, @Query("zip") zip: String): Call<LocationWeather>
+    fun getWeather(@HeaderMap headers: Map<String, String>, @Path("zip") zip: String, key: String): Call<LocationWeather>
 }

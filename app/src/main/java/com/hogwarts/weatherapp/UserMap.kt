@@ -6,11 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.*
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,14 +25,21 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
+import com.hogwarts.weatherapp.adapters.ContentProvider
 import com.hogwarts.weatherapp.adapters.LocationAdapter
 import com.hogwarts.weatherapp.models.LocationWeather
+import com.hogwarts.weatherapp.network.Routes
+import com.hogwarts.weatherapp.network.ServiceManager
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.android.synthetic.main.weather.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
+import kotlin.math.roundToInt
 
 
 class UserMap : AppCompatActivity(), OnMapReadyCallback {
@@ -40,9 +51,13 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var _adapter: LocationAdapter
     private lateinit var list: ArrayList<Location>
     private var clicked = true
+    private lateinit var progress: ContentProvider
+    private var counter = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.userapp)
+        progress = ContentProvider(this)
         context = this
         arrayList = ArrayList()
         list = ArrayList()
@@ -50,7 +65,12 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        getLocation()
+        progress.createDialog()
+        if (networkAvailable())
+            getLocation()
+        else
+            Toast.makeText(this, "Please check your network and refresh the app", Toast.LENGTH_LONG)
+                .show()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -63,11 +83,19 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
             val location = LatLng(loc.latitude, loc.longitude)
             mMap.addMarker(MarkerOptions().position(location).title(cityName))
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(list[0].latitude,list[0].longitude), 10F))
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                    list[0].latitude,
+                    list[0].longitude
+                ), 10F
+            )
+        )
     }
 
-    private fun getLocation() {
+    private fun getLocation(): List<Address> {
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
+        var addresses: List<Address> = ArrayList()
         val locationListener = object : LocationListener {
             @SuppressLint("SetTextI18n")
             override fun onLocationChanged(location: Location?) {
@@ -75,7 +103,7 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                 val longitude = location.longitude
 
                 val geocoder = Geocoder(context, Locale.getDefault())
-                val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 10)
+                addresses = geocoder.getFromLocation(latitude, longitude, 1)
 
                 Log.i("test", "Response: ${addresses.size}")
 
@@ -86,8 +114,8 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                 clicked = false
                 setLocation(addresses[0].getAddressLine(0), addresses)
 
-                val gson = Gson()
                 thread {
+                    val gson = Gson()
                     val jsonStr = try {
                         URL(url).readText()
                     } catch (ex: Exception) {
@@ -95,28 +123,46 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                     }
                     runOnUiThread {
                         val testModel = gson.fromJson(jsonStr, LocationWeather::class.java)
-                        if (testModel.weather[0].main.contains("cloud", true))
-                            weather_icon.setImageDrawable(
+                        when {
+                            testModel.weather[0].main.contains(
+                                "cloud",
+                                true
+                            ) -> weather_icon.setImageDrawable(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.ic_action_cloud
                                 )
                             )
-                        else if(testModel.weather[0].main.contains("sun", true))
-                            weather_icon.setImageDrawable(
+                            testModel.weather[0].main.contains(
+                                "sun",
+                                true
+                            ) -> weather_icon.setImageDrawable(
                                 ContextCompat.getDrawable(
                                     context,
                                     R.drawable.ic_action_sunny
                                 )
                             )
+                            testModel.weather[0].main.contains(
+                                "clear",
+                                true
+                            ) -> weather_icon.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.ic_action_clear
+                                )
+                            )
+                        }
                         weather.text = testModel.weather[0].main
                         max_temp.text =
-                            "Max temp: ${testModel.main.temp_max}. \nWind speed: ${testModel.wind.speed}."
+                            "Max temp: ${(testModel.main.temp_max / 10).roundToInt()}°C " +
+                                    "\nWind speed: ${testModel.wind.speed.roundToInt()}Km/H"
                         weather_description.text = "Type: ${testModel.weather[0].description}."
                         weather_city.text = testModel.name
 
                         _adapter = LocationAdapter(addresses)
                         list_item.adapter = _adapter
+                        progress.hideDialog()
+                        _adapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -139,7 +185,6 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSION_REQUEST_ACCESS_FINE_LOCATION
             )
-            return
         }
         locationManager!!.requestLocationUpdates(
             LocationManager.NETWORK_PROVIDER,
@@ -147,6 +192,8 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
             0f,
             locationListener
         )
+
+        return addresses
     }
 
     override fun onRequestPermissionsResult(
@@ -183,7 +230,7 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
             weather_card_layout.visibility = View.GONE
             true
         }
-        R.id.back_action_icon ->{
+        R.id.back_action_icon -> {
             startActivity(Intent(this, UserMap::class.java))
             finish()
             true
@@ -196,5 +243,26 @@ class UserMap : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.network, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun networkAvailable(): Boolean {
+        val connectionManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val active = connectionManager.activeNetwork
+        return active != null && connectionManager.isDefaultNetworkActive
+    }
+
+    override fun onBackPressed() {
+        if (counter < 1) {
+            Toast.makeText(
+                this,
+                "Press back button again to exit..", Toast.LENGTH_SHORT
+            ).show()
+            counter++
+        } else {
+            counter = 0
+            super.onBackPressed()
+        }
     }
 }

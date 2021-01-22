@@ -9,7 +9,7 @@ class Splash : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         Thread {
-            Thread.sleep(1000)
+            Thread.sleep(500)
             startActivity(Intent(this, UserMap::class.java))
             finish()
         }.start()

@@ -19,5 +19,5 @@
     <string name="icon">Province: </string>
     <string name="description">City/Town: </string>
     <string name="forecast_id">Feature Name: </string>
-    <string name="home">Home</string>
+    <string name="home">Refresh</string>
 </resources>
