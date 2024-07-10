@@ -28,7 +28,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideBaseURL(): String {
-        return ""
+        return "https://api.openweathermap.org/data/2.5/weather?"
     }
 
     /** Provides LoggingInterceptor for api information */

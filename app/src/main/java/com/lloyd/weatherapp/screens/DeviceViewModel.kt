@@ -1,4 +1,4 @@
-package com.lloyd.weatherapp.screens.home
+package com.lloyd.weatherapp.screens
 
 import android.location.Location
 import androidx.compose.runtime.getValue
@@ -13,6 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeviceViewModel@Inject constructor(private val locationTracker: LocationTracker) : ViewModel() {
-    var currentLocation by mutableStateOf<Location?>(null)
+    private var currentLocation by mutableStateOf<Location?>(null)
     fun getCurrentLocation() { viewModelScope.launch { currentLocation = locationTracker.getCurrentLocation() } }
 }
