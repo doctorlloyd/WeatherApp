@@ -28,6 +28,8 @@ buildscript {
             junit                   : "4.13.2",
             espressoJunit           : "1.1.3",
             zxingVersion            : "4.3.0",
+            playServicesMaps        : "18.2.0",
+            playServicesLocation    : "17.1.0",
             espressoCore            : "3.4.0",
             androidTestCore         : "1.4.0",
             androidTestJunit        : "1.1.3",
@@ -117,6 +119,10 @@ buildscript {
         Permissions = [
             Accompanist         :  "com.google.accompanist:accompanist-permissions:${versions.accompanistPermissions}"
         ]
+        googleMaps = [
+            GMSplayServicesMaps     :  "com.google.android.gms:play-services-maps:${versions.playServicesMaps}",
+            GMSplayServicesLocation :  "com.google.android.gms:play-services-location:${versions.playServicesLocation}"
+        ]
     }
 
     repositories {
@@ -131,5 +137,6 @@ buildscript {
 }
 
 task clean(type: Delete) {
+    //noinspection GrDeprecatedAPIUsage
     delete rootProject.buildDir
 }
