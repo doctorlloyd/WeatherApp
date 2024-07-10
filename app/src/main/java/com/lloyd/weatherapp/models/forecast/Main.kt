@@ -1,16 +1,17 @@
 package com.lloyd.weatherapp.models.forecast
 
 import android.os.Parcelable
+import com.squareup.moshi.Json
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Main(
-    val feels_like: Double,
-    val grnd_level: Int,
-    val humidity: Int,
-    val pressure: Int,
-    val sea_level: Int,
-    val temp: Double,
-    val temp_max: Double,
-    val temp_min: Double
+    @Json(name = "feels_like") val feels_like: Double,
+    @Json(name = "grnd_level") val grnd_level: Int,
+    @Json(name = "humidity") val humidity: Int,
+    @Json(name = "pressure") val pressure: Int,
+    @Json(name = "sea_level") val sea_level: Int,
+    @Json(name = "temp") val temp: Double,
+    @Json(name = "temp_max") val temp_max: Double,
+    @Json(name = "temp_min") val temp_min: Double
 ) : Parcelable
