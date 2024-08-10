@@ -54,11 +54,11 @@ android {
     }
 
     signingConfigs {
-//        release {
-//            storePassword 'android'
-//            keyAlias 'app'
-//            keyPassword 'android'
-//        }
+        release {
+            storePassword 'android'
+            keyAlias 'app'
+            keyPassword 'android'
+        }
 //        debug {
 //            storePassword 'android'
 //            keyAlias 'app'

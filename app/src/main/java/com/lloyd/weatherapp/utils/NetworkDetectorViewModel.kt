@@ -1,4 +1,3 @@
-@file:Suppress("DEPRECATION")
 package com.lloyd.weatherapp.utils
 
 import android.app.Application
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
 import java.util.concurrent.Executors
 
+@Suppress("DEPRECATION")
 class NetworkDetectorViewModel (application: Application): AndroidViewModel(application){
     @RequiresApi(Build.VERSION_CODES.R)
     val telephonyType = callbackFlow {

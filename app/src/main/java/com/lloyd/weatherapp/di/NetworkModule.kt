@@ -1,6 +1,5 @@
 package com.lloyd.weatherapp.di
 
-import com.lloyd.weatherapp.BuildConfig
 import com.lloyd.weatherapp.data.WeatherApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -13,13 +12,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -28,7 +22,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideBaseURL(): String {
-        return "https://api.openweathermap.org/data/2.5/weather?"
+        return "https://api.openweathermap.org"
     }
 
     /** Provides LoggingInterceptor for api information */
@@ -49,33 +43,11 @@ object NetworkModule {
         okHttpClient.readTimeout(10, TimeUnit.SECONDS)
         okHttpClient.writeTimeout(10, TimeUnit.SECONDS)
         okHttpClient.addInterceptor(loggingInterceptor)
-
-        //Telling HttpClient to ignore SSL checks during DEBUG mode
-        return okHttpClient.apply {
-            if (BuildConfig.DEBUG) ignoreAllSSLErrors()
-        }.build()
+        return okHttpClient.build()
     }
 
     @Provides
     fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-
-    /** This will allow the application to ignore the Certificate issue, BUT only on DEBUG MODE */
-    private fun OkHttpClient.Builder.ignoreAllSSLErrors(): OkHttpClient.Builder {
-        val naiveTrustManager = object : X509TrustManager {
-            override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
-            override fun checkClientTrusted(certs: Array<X509Certificate>, authType: String) = Unit
-            override fun checkServerTrusted(certs: Array<X509Certificate>, authType: String) = Unit
-        }
-
-        val insecureSocketFactory = SSLContext.getInstance("SSL").apply {
-            val trustAllCerts = arrayOf<TrustManager>(naiveTrustManager)
-            init(null, trustAllCerts, SecureRandom())
-        }.socketFactory
-
-        sslSocketFactory(insecureSocketFactory, naiveTrustManager)
-        hostnameVerifier { _, _ -> true }
-        return this
-    }
 
     /** Provides converter factory for retrofit */
     @Singleton

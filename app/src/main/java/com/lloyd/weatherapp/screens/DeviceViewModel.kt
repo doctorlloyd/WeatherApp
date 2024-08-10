@@ -13,6 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeviceViewModel@Inject constructor(private val locationTracker: LocationTracker) : ViewModel() {
-    private var currentLocation by mutableStateOf<Location?>(null)
+    var currentLocation by mutableStateOf<Location?>(null)
     fun getCurrentLocation() { viewModelScope.launch { currentLocation = locationTracker.getCurrentLocation() } }
 }
