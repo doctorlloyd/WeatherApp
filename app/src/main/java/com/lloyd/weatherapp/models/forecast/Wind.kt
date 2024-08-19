@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Wind(
-    @Json(name = "deg") val deg: Int,
-    @Json(name = "gust") val gust: Double,
-    @Json(name = "speed") val speed: Double
+    @Json(name = "deg") val deg: Int? = 0,
+    @Json(name = "gust") val gust: Double? = 0.00,
+    @Json(name = "speed") val speed: Double? = 0.00
 ) : Parcelable

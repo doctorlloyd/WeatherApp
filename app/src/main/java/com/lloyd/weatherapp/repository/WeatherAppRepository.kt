@@ -2,7 +2,7 @@ package com.lloyd.weatherapp.repository
 
 import com.lloyd.weatherapp.data.WeatherApiService
 import com.lloyd.weatherapp.models.forecast.Weather
-import com.lloyd.weatherapp.models.weekforecasts.Forecasts
+import com.lloyd.weatherapp.models.weekforecasts.Forecast
 import com.lloyd.weatherapp.utils.network.DataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,7 @@ class WeatherAppRepository@Inject constructor(private val weatherApiService: Wea
         }
     }.flowOn(Dispatchers.IO)
 
-    suspend fun getWeeklyWeather(lat: String, lon: String, key: String): Flow<DataState<Forecasts>> = flow {
+    suspend fun getWeeklyWeather(lat: String, lon: String, key: String): Flow<DataState<Forecast>> = flow {
         emit(DataState.Loading)
         try {
             val forecasts = weatherApiService.getWeeklyWeather(lat = lat, lon = lon, key = key)

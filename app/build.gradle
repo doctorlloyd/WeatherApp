@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
@@ -13,8 +14,8 @@ android {
             defaultConfig {
                 applicationId "com.lloyd.weatherapp"
                 minSdk defaultMinSdkVersion
-                        targetSdk defaultTargetSdkVersion
-                        versionCode 20240607
+                targetSdk defaultTargetSdkVersion
+                versionCode 20240607
                 versionName "1.0"
 
                 testInstrumentationRunner "com.clean.app.PostAppTestRunner"
@@ -78,18 +79,22 @@ dependencies {
     implementation androidx.composeUi
     implementation androidx.workRuntimeKtx
     implementation androidx.composeMaterial
+    implementation androidx.fragmentKtx
+    implementation androidx.activityKtx
     implementation androidx.composeActivity
     implementation androidx.navigationCompose
     implementation androidx.composeMaterialIcons
     implementation androidx.hiltNavigationCompose
     implementation androidx.composeUiToolingPreview
 
+    // Local storage (persistence libraries)
     implementation persistence.datastore
     implementation persistence.roomRuntime
     implementation persistence.roomKtx
     implementation persistence.roomCommon
     kapt persistence.roomCompiler
 
+    // Data injection and testing libraries
     kapt di.hiltCompiler
     implementation di.hiltAndroid
     testImplementation test.junit
@@ -105,7 +110,7 @@ dependencies {
     androidTestImplementation androidTest.idlingResource
     androidTestImplementation androidTest.composeUiTestJunit
 
-   // GMS services
+    // GMS services
     implementation googleMaps.GMSplayServicesMaps
     implementation googleMaps.GMSplayServicesLocation
 
@@ -117,11 +122,4 @@ dependencies {
     implementation network.retrofitMoshi
     implementation network.retroConvertor
     implementation network.okHttpInterceptor
-
-    //Scanner
-    implementation scanner.zxing
-
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.activity:activity-ktx:1.2.0-alpha07'
-    implementation 'androidx.fragment:fragment-ktx:1.3.0-alpha07'
 }

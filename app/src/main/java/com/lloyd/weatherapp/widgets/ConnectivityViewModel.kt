@@ -1,4 +1,4 @@
-package com.lloyd.weatherapp.utils
+package com.lloyd.weatherapp.widgets
 
 import androidx.lifecycle.ViewModel
 import com.lloyd.weatherapp.utils.networkConnection.ConnectivityManager

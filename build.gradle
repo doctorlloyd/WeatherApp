@@ -7,13 +7,13 @@ buildscript {
         defaultTargetSdkVersion = 34
         defaultMinSdkVersion = 26
         versions = [
-            androidGradlePlugin     : "7.4.1",
+            androidGradlePlugin     : "7.4.2",
             kotlin                  : "1.7.20",
             hilt                    : "2.42",
             okHttp                  : "4.9.0",
             moshi                   : "1.13.0",
             coreKtx                 : "1.7.0",
-            appCompat               : "1.4.1",
+            appCompat               : "1.3.1",
             compose                 : "1.3.2",
             room                    : "2.5.0",
             datastore               : "1.0.0",
@@ -27,9 +27,10 @@ buildscript {
             hiltNavigationCompose   : "1.0.0-rc01",
             junit                   : "4.13.2",
             espressoJunit           : "1.1.3",
-            zxingVersion            : "4.3.0",
             playServicesMaps        : "18.2.0",
             playServicesLocation    : "17.1.0",
+            activityKtx             : "1.2.0-alpha07",
+            fragmentKtx             : "1.3.0-alpha07",
             espressoCore            : "3.4.0",
             androidTestCore         : "1.4.0",
             androidTestJunit        : "1.1.3",
@@ -57,9 +58,6 @@ buildscript {
             roomCommon  : "androidx.room:room-common:${versions.room}",
             datastore   : "androidx.datastore:datastore-preferences:${versions.datastore}"
         ]
-        scanner = [
-            zxing       : "com.journeyapps:zxing-android-embedded:${versions.zxingVersion}"
-        ]
         di = [
             hiltAndroid     : "com.google.dagger:hilt-android:${versions.hilt}",
             hiltCompiler    : "com.google.dagger:hilt-compiler:${versions.hilt}",
@@ -81,15 +79,14 @@ buildscript {
             livedata               : "androidx.compose.runtime:runtime-livedata:${versions.compose}",
             workRuntimeKtx         : "androidx.work:work-runtime-ktx:${versions.workRuntimeKtx}",
             hiltWork               : "androidx.hilt:hilt-work:${versions.hiltWork}",
+            fragmentKtx            : "androidx.fragment:fragment-ktx:${versions.fragmentKtx}",
+            activityKtx            : "androidx.activity:activity-ktx:${versions.activityKtx}",
             LifecycleLiveDataKtx   : "androidx.lifecycle:lifecycle-livedata-ktx:${versions.LifecycleLiveDataKtx}",
             lifecycleRuntimeCompose: "androidx.lifecycle:lifecycle-runtime-compose:${versions.lifeCycleCompose}"
         ]
         material = [
             material    : "com.google.android.material:material:${versions.material}",
             material3   : "androidx.compose.material3:material3-android:${versions.material3}"
-        ]
-        coroutines = [
-            coroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}"
         ]
         network = [
             okHttp              : "com.squareup.okhttp3:okhttp:${versions.okHttp}",

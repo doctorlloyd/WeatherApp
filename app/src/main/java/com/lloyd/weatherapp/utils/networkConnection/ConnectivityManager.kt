@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LifecycleOwner
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ConnectivityManager@Inject constructor(application: Application) {
     private val connectionLiveData = ConnectionLiveData(application)
 

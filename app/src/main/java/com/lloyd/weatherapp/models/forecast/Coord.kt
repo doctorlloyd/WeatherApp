@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Coord(
-    @Json(name = "lat")val lat: Double,
-    @Json(name = "lon")val lon: Double
+    @Json(name = "lat")val lat: Double? = 0.00,
+    @Json(name = "lon")val lon: Double? = 0.00
 ) : Parcelable
