@@ -19,5 +19,6 @@ data class Weather(
     @Json(name = "timezone") val timezone: Int? = 0,
     @Json(name = "visibility") val visibility: Int? = 0,
     @Json(name = "weather") val weather: List<WeatherList>? = ArrayList(),
-    @Json(name = "amount") val wind: Wind? = Wind()
+    @Json(name = "amount") val wind: Wind? = Wind(),
+    @Json(name = "dt_txt") val dt_txt: String? = null,
 ): Parcelable
