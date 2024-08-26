@@ -32,6 +32,7 @@ import com.lloyd.weatherapp.utils.theme.Cloudy
 import com.lloyd.weatherapp.utils.theme.Rainy
 import com.lloyd.weatherapp.utils.theme.Sunny
 import com.lloyd.weatherapp.widgets.loader.Loader
+import com.lloyd.weatherapp.widgets.search.CustomSearchViewRight
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 
@@ -87,6 +88,7 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun WeatherWidget(weather: MutableState<Weather>, weeklyWeather: MutableState<Forecast>){
     val weatherList: MutableList<Weather> = mutableListOf()
+    var searchText by remember { mutableStateOf("") }
 
     if(weeklyWeather.value.list?.isNotEmpty() == true){
         for (w in weeklyWeather.value.list!!){
@@ -103,6 +105,10 @@ fun WeatherWidget(weather: MutableState<Weather>, weeklyWeather: MutableState<Fo
             else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains("rain", ignoreCase = true)) R.drawable.forest_rainy
             else R.drawable.forest_cloudy
             ), contentScale = ContentScale.FillBounds) }){
+                CustomSearchViewRight(placeholder = "Search for your favourite city.", search = searchText, modifier = Modifier.align(Alignment.TopCenter).fillMaxWidth().background(color = Color.Transparent).padding(start = 8.dp, end = 8.dp, top = 8.dp), onValueChange = { text -> searchText = text }, weather = {
+                    // navigate to another screen
+
+                })
                 Column(modifier = Modifier.align(Alignment.Center),verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
                     Text(text = "${"%.0f".format(convertTemperature(weather.value.main?.temp!!))} \u00B0C", color = Color.White, style = TextStyle(fontSize = 28.sp, fontWeight = FontWeight.Bold))
                     Text(text = weather.value.weather?.get(0)?.description!!, color = Color.White, style = TextStyle(fontSize = 22.sp))
