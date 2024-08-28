@@ -34,12 +34,13 @@ fun CustomSearchViewRight(placeholder: String, search: String, modifier: Modifie
 
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically){
         OutlinedTextField(shape = MaterialTheme.shapes.large, singleLine = true, modifier = Modifier.height(50.dp).align(Alignment.CenterVertically).fillMaxWidth(),
-            value = search, onValueChange = onValueChange, colors = TextFieldDefaults.textFieldColors(textColor = Color.Black, backgroundColor = Color.Transparent), placeholder = { Text(textAlign = TextAlign.Center, text = placeholder, style = TextStyle(fontSize = 14.sp)) }, trailingIcon = {
+            value = search, onValueChange = onValueChange, colors = TextFieldDefaults.textFieldColors(focusedIndicatorColor = Color.White, unfocusedIndicatorColor = Color.White,
+                textColor = Color.White, backgroundColor = Color.Transparent), placeholder = { Text(text = placeholder, style = TextStyle(color = Color.White, textAlign = TextAlign.Center, fontSize = 18.sp)) }, trailingIcon = {
                 IconButton(onClick = {
                     scope.launch {
 
                     }
-                }){ Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = MaterialTheme.colors.primaryVariant) }
+                }){ Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = Color.White) }
             })
     }
 

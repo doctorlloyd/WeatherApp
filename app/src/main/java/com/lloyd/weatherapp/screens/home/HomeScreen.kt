@@ -100,12 +100,12 @@ fun WeatherWidget(weather: MutableState<Weather>, weeklyWeather: MutableState<Fo
 
     if(weatherList.size >= 5) Box(modifier = Modifier.fillMaxSize().padding(0.dp)){
         Column(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = with (Modifier){ fillMaxSize().weight(0.9f).paint(painterResource(id =
+            Box(modifier = with (Modifier){ fillMaxSize().weight(0.8f).paint(painterResource(id =
             if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains("clear", ignoreCase = true)) R.drawable.forest_sunny
             else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains("rain", ignoreCase = true)) R.drawable.forest_rainy
             else R.drawable.forest_cloudy
             ), contentScale = ContentScale.FillBounds) }){
-                CustomSearchViewRight(placeholder = "Search for your favourite city.", search = searchText, modifier = Modifier.align(Alignment.TopCenter).fillMaxWidth().background(color = Color.Transparent).padding(start = 8.dp, end = 8.dp, top = 8.dp), onValueChange = { text -> searchText = text }, weather = {
+                CustomSearchViewRight(placeholder = "Search for your favourite city.", search = searchText, modifier = Modifier.align(Alignment.TopCenter).fillMaxWidth().background(color = Color.Transparent).padding(start = 16.dp, end = 16.dp, top = 8.dp), onValueChange = { text -> searchText = text }, weather = {
                     // navigate to another screen
 
                 })
@@ -132,7 +132,7 @@ fun WeatherWidget(weather: MutableState<Weather>, weeklyWeather: MutableState<Fo
                 }
             }
             Divider(color = Color.White, thickness = 2.dp)
-            Column(modifier = Modifier.fillMaxWidth().weight(0.9f).background(color =
+            Column(modifier = Modifier.fillMaxWidth().weight(1f).background(color =
             if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains("clear", ignoreCase = true)) Sunny
             else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains("rain", ignoreCase = true)) Rainy
             else Cloudy).padding(top = 14.dp)){
