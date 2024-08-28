@@ -23,6 +23,7 @@ import com.lloyd.weatherapp.R
 import com.lloyd.weatherapp.models.remote.forecast.Weather
 import com.lloyd.weatherapp.screens.home.HomeViewModel
 import com.lloyd.weatherapp.screens.search.SearchScreenViewModel
+import com.lloyd.weatherapp.screens.search.addLocalWeather
 import com.lloyd.weatherapp.utils.network.DataState
 import com.lloyd.weatherapp.widgets.Dialog
 import com.lloyd.weatherapp.widgets.UserAlertDialog
@@ -30,9 +31,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun CustomSearchViewRight(navController: NavController, placeholder: String, search: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit, weather: (Weather) -> Unit) {
+fun CustomSearchViewRight(placeholder: String, search: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit, weather: (Weather) -> Unit) {
     val context = LocalContext.current
-    val userNotFound = remember { mutableStateOf(false) }
+    val cityNotFound = remember { mutableStateOf(false) }
 
     // Used for side effects on submit button
     val viewModelJob = Job()
@@ -40,7 +41,7 @@ fun CustomSearchViewRight(navController: NavController, placeholder: String, sea
 
     // Weather view model
     val homeViewModel = hiltViewModel<HomeViewModel>()
-    val localViewModel = hiltViewModel<SearchScreenViewModel>()
+    val searchScreenViewModel = hiltViewModel<SearchScreenViewModel>()
 
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically){
         OutlinedTextField(shape = MaterialTheme.shapes.large, singleLine = true, modifier = Modifier.height(50.dp).align(Alignment.CenterVertically).fillMaxWidth(),
@@ -55,8 +56,8 @@ fun CustomSearchViewRight(navController: NavController, placeholder: String, sea
                                     when(it){
                                         is DataState.Success -> {
                                             if (it.data.main?.temp!! > 0){
-                                                //ToDO store weather data to local storage
-                                            }
+                                                addLocalWeather(weather = it.data, searchScreenViewModel = searchScreenViewModel)
+                                            } else cityNotFound.value = true
                                         }
                                         is DataState.Loading -> {}
                                         is DataState.Error -> {}
@@ -70,7 +71,7 @@ fun CustomSearchViewRight(navController: NavController, placeholder: String, sea
     }
 
     // User was not found
-    if (userNotFound.value) Dialog(openDialog = userNotFound, dialogTitle = "Item search", headColor = Color.Red) {
-        UserAlertDialog(message = "Item was not found", openDialog = userNotFound)
+    if (cityNotFound.value) Dialog(openDialog = cityNotFound, dialogTitle = "City information", headColor = Color.Red) {
+        UserAlertDialog(message = "The City you're trying to search is not found.", openDialog = cityNotFound)
     }
 }

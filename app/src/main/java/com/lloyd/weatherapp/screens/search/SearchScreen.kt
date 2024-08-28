@@ -46,7 +46,7 @@ fun SearchScreen(navController: NavController) {
             }
         }){
         Box(modifier = Modifier.fillMaxSize().padding(0.dp)){
-            CustomSearchViewRight(navController = navController, placeholder = "Search for your favourite city.", search = searchText, modifier = Modifier.align(
+            CustomSearchViewRight(placeholder = "Search for your favourite city.", search = searchText, modifier = Modifier.align(
                 Alignment.TopCenter).fillMaxWidth().background(color = Color.Transparent).padding(start = 16.dp, end = 16.dp, top = 8.dp), onValueChange = { text -> searchText = text }, weather = {
                 // navigate to another screen
 
