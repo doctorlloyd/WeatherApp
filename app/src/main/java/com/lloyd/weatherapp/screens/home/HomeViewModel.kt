@@ -2,8 +2,8 @@ package com.lloyd.weatherapp.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lloyd.weatherapp.models.forecast.Weather
-import com.lloyd.weatherapp.models.weekforecasts.Forecast
+import com.lloyd.weatherapp.models.remote.forecast.Weather
+import com.lloyd.weatherapp.models.remote.weekforecasts.Forecast
 import com.lloyd.weatherapp.repository.WeatherAppRepository
 import com.lloyd.weatherapp.utils.network.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel

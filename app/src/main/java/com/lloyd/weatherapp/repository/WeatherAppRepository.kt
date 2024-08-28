@@ -1,8 +1,8 @@
 package com.lloyd.weatherapp.repository
 
-import com.lloyd.weatherapp.data.WeatherApiService
-import com.lloyd.weatherapp.models.forecast.Weather
-import com.lloyd.weatherapp.models.weekforecasts.Forecast
+import com.lloyd.weatherapp.data.remote.WeatherApiService
+import com.lloyd.weatherapp.models.remote.forecast.Weather
+import com.lloyd.weatherapp.models.remote.weekforecasts.Forecast
 import com.lloyd.weatherapp.utils.network.DataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
