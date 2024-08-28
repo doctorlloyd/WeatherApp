@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         connectivityManager.registerConnectionObserver(this)
+        getActualLocation(viewModel)
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -55,8 +56,8 @@ class MainActivity : ComponentActivity() {
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
-                return
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
+            return
         }
 
         task.addOnSuccessListener {

@@ -21,6 +21,16 @@ class WeatherAppRepository@Inject constructor(private val weatherApiService: Wea
         }
     }.flowOn(Dispatchers.IO)
 
+    suspend fun getTodayWeatherByCity(city: String, key: String): Flow<DataState<Weather>> = flow {
+        emit(DataState.Loading)
+        try {
+            val forecast = weatherApiService.getTodayWeatherByCity(city = city, key = key)
+            emit(DataState.Success(data = forecast))
+        } catch (e: Exception) {
+            emit(DataState.Error(exception = e))
+        }
+    }.flowOn(Dispatchers.IO)
+
     suspend fun getWeeklyWeather(lat: String, lon: String, key: String): Flow<DataState<Forecast>> = flow {
         emit(DataState.Loading)
         try {

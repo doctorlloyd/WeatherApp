@@ -29,6 +29,13 @@ class HomeViewModel@Inject constructor(private val repository: WeatherAppReposit
             }
         }
     }
+    suspend fun getTodayWeatherByCity(city: String, key: String){
+        viewModelScope.launch {
+            repository.getTodayWeatherByCity(city = city, key = key).collectLatest {
+                weatherDataState.tryEmit(it)
+            }
+        }
+    }
     private suspend fun getWeeklyWeather(lat: String, lon: String, key: String){
         viewModelScope.launch {
             repository.getWeeklyWeather(lat = lat, lon = lon, key = key).collectLatest {

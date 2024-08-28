@@ -1,11 +1,11 @@
 package com.lloyd.weatherapp.screens.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -138,10 +138,10 @@ fun WeatherWidget(weather: MutableState<Weather>, weeklyWeather: MutableState<Fo
             else Cloudy).padding(top = 14.dp)){
                 LazyColumn(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(getWeekDays().size) { i ->
-                        Row(modifier = Modifier.fillMaxWidth().padding(end = 14.dp, start = 14.dp), horizontalArrangement = Arrangement.SpaceEvenly){
-                            Text(textAlign = TextAlign.Center, modifier = Modifier.weight(1f), text = getWeekDays()[i], color = Color.White)
-                            Icon(modifier = Modifier.weight(1f), painter = painterResource(id = if(weatherList.size == 5) getWeatherIcon(weatherList[i].weather!![0].icon!!) else R.mipmap.clear), contentDescription = null, tint = Color.White)
-                            Text(textAlign = TextAlign.Center, modifier = Modifier.weight(1f), text = "${"%.0f".format(convertTemperature(weatherList[i].main?.temp!!))} \u00B0C", color = Color.White)
+                        Row(modifier = Modifier.fillMaxWidth().padding(end = 14.dp, start = 14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly){
+                            Text(textAlign = TextAlign.Center, text = getWeekDays()[i], color = Color.White)
+                            Image(painter = painterResource(id = getWeatherIcon(weatherList[i].weather!![0].icon!!)), contentDescription = null)
+                            Text(textAlign = TextAlign.Center, text = "${"%.0f".format(convertTemperature(weatherList[i].main?.temp!!))} \u00B0C", color = Color.White)
                         }
                     }
                 }

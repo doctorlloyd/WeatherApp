@@ -12,19 +12,21 @@ fun convertTemperature(kelvin: Double): Double {
 
 fun getWeatherIcon(code: String): Int {
     return when (code) {
-        "01d" -> R.mipmap.clear      // Clear sky during the day
-        "01n" -> R.mipmap.clear     // Clear sky during the night
-        "02d" -> R.mipmap.partlysunny      // Few clouds during the day
-        "02n" -> R.mipmap.partlysunny    // Few clouds during the night
-        "03d", "03n" -> R.mipmap.cloudy_day_foreground  // Scattered clouds (day/night)
-        "04d", "04n" -> R.mipmap.cloudy_day_foreground  // Broken clouds (day/night)
-        "09d", "09n" -> R.drawable.shower_rain  // Shower rain (day/night)
-        "10d" -> R.mipmap.rain            // Rain during the day
-        "10n" -> R.mipmap.rain          // Rain during the night
-        "11d", "11n" -> R.drawable.storm // Thunderstorm (day/night)
-        "13d", "13n" -> R.drawable.snow         // Snow (day/night)
-        "50d", "50n" -> R.drawable.wind_proof         // Mist (day/night)
-        else -> R.drawable.ic_default_weather      // Default icon for unknown codes
+        "01d" -> R.mipmap.sun_light      // Clear sky during the day
+        "01n" -> R.mipmap.half_moon_light     // Clear sky during the night
+        "02d" -> R.mipmap.partial_cloudy_light      // Few clouds during the day
+        "02n" -> R.mipmap.cloudy_night_light    // Few clouds during the night
+        "03d" -> R.mipmap.cloud_light
+        "03n" -> R.mipmap.cloudy_night_stars_light // Scattered clouds (day/night)
+        "04d" -> R.mipmap.mostly_cloud_light
+        "04n" -> R.mipmap.double_cloudy_night_light // Broken clouds (day/night)
+        "09d", "09n" -> R.mipmap.drop_light // Shower rain (day/night)
+        "10d" -> R.mipmap.rainyday_light            // Rain during the day
+        "10n" -> R.mipmap.heavy_rain_light          // Rain during the night
+        "11d", "11n" -> R.mipmap.thunderstorm_light // Thunderstorm (day/night)
+        "13d", "13n" -> R.mipmap.heavy_snowfall_light         // Snow (day/night)
+        "50d", "50n" -> R.mipmap.mostly_cloudy_light         // Mist (day/night)
+        else -> R.mipmap.eclipse_light      // Default icon for unknown codes
     }
 }
 
