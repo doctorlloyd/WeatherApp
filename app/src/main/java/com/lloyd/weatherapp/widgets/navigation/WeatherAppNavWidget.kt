@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lloyd.weatherapp.screens.home.HomeScreen
+import com.lloyd.weatherapp.screens.search.SearchScreen
 
 @Composable
 fun WeatherAppNavWidget() {
@@ -12,6 +13,9 @@ fun WeatherAppNavWidget() {
     NavHost(navController = navController, startDestination = WeatherAppNavScreens.HomeScreen.name) {
         composable(WeatherAppNavScreens.HomeScreen.name) {
             HomeScreen(navController = navController)
+        }
+        composable(WeatherAppNavScreens.SearchScreen.name) {
+            SearchScreen(navController = navController)
         }
     }
 }

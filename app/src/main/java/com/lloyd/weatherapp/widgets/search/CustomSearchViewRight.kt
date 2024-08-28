@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.lloyd.weatherapp.R
 import com.lloyd.weatherapp.models.remote.forecast.Weather
 import com.lloyd.weatherapp.screens.home.HomeViewModel
+import com.lloyd.weatherapp.screens.search.SearchScreenViewModel
 import com.lloyd.weatherapp.utils.network.DataState
 import com.lloyd.weatherapp.widgets.Dialog
 import com.lloyd.weatherapp.widgets.UserAlertDialog
@@ -39,11 +40,12 @@ fun CustomSearchViewRight(navController: NavController, placeholder: String, sea
 
     // Weather view model
     val homeViewModel = hiltViewModel<HomeViewModel>()
+    val localViewModel = hiltViewModel<SearchScreenViewModel>()
 
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically){
         OutlinedTextField(shape = MaterialTheme.shapes.large, singleLine = true, modifier = Modifier.height(50.dp).align(Alignment.CenterVertically).fillMaxWidth(),
-            value = search, onValueChange = onValueChange, colors = TextFieldDefaults.textFieldColors(focusedIndicatorColor = Color.White, unfocusedIndicatorColor = Color.White,
-                textColor = Color.White, backgroundColor = Color.Transparent), placeholder = { Text(text = placeholder, style = TextStyle(color = Color.White, textAlign = TextAlign.Center, fontSize = 18.sp)) }, trailingIcon = {
+            value = search, onValueChange = onValueChange, colors = TextFieldDefaults.textFieldColors(focusedIndicatorColor = MaterialTheme.colors.secondary, unfocusedIndicatorColor = MaterialTheme.colors.secondary,
+                textColor = MaterialTheme.colors.secondary, backgroundColor = Color.Transparent), placeholder = { Text(text = placeholder, style = TextStyle(color = MaterialTheme.colors.secondary, textAlign = TextAlign.Center, fontSize = 18.sp)) }, trailingIcon = {
                 IconButton(onClick = {
                     scope.launch {
                         withContext(Dispatchers.IO){
@@ -63,7 +65,7 @@ fun CustomSearchViewRight(navController: NavController, placeholder: String, sea
                             }
                         }
                     }
-                }){ Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = Color.White) }
+                }){ Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = MaterialTheme.colors.secondary) }
             })
     }
 

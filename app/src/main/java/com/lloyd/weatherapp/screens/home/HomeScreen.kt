@@ -5,9 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
+import androidx.compose.material.*
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -34,7 +38,7 @@ import com.lloyd.weatherapp.utils.theme.Cloudy
 import com.lloyd.weatherapp.utils.theme.Rainy
 import com.lloyd.weatherapp.utils.theme.Sunny
 import com.lloyd.weatherapp.widgets.loader.Loader
-import com.lloyd.weatherapp.widgets.search.CustomSearchViewRight
+import com.lloyd.weatherapp.widgets.navigation.WeatherAppNavScreens
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 
@@ -91,7 +95,7 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun WeatherWidget(navController: NavController, weather: MutableState<Weather>, weeklyWeather: MutableState<Forecast>){
     val weatherList: MutableList<Weather> = mutableListOf()
-    var searchText by remember { mutableStateOf("") }
+    var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
     if(weeklyWeather.value.list?.isNotEmpty() == true){
         for (w in weeklyWeather.value.list!!){
@@ -101,54 +105,72 @@ fun WeatherWidget(navController: NavController, weather: MutableState<Weather>, 
         }
     }
 
-    if(weatherList.size >= 5) Box(modifier = Modifier.fillMaxSize().padding(0.dp)){
-        Column(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = with (Modifier){ fillMaxSize().weight(0.8f).paint(painterResource(id =
-            if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.clear), ignoreCase = true)) R.drawable.forest_sunny
-            else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.rainy), ignoreCase = true)) R.drawable.forest_rainy
-            else R.drawable.forest_cloudy
-            ), contentScale = ContentScale.FillBounds) }){
-                CustomSearchViewRight(navController = navController, placeholder = "Search for your favourite city.", search = searchText, modifier = Modifier.align(Alignment.TopCenter).fillMaxWidth().background(color = Color.Transparent).padding(start = 16.dp, end = 16.dp, top = 8.dp), onValueChange = { text -> searchText = text }, weather = {
-                    // navigate to another screen
-
-                })
-                Column(modifier = Modifier.align(Alignment.Center),verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(text = "${"%.0f".format(convertTemperature(weather.value.main?.temp!!))} \u00B0C", style = TextStyle(fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White))
-                    Text(text = weather.value.weather?.get(0)?.description!!, style = TextStyle(fontSize = 22.sp, color = Color.White))
+    if(weatherList.size >= 5)
+        Scaffold(
+            bottomBar = {
+                NavigationBar(modifier = Modifier.height(65.dp), containerColor = if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.clear), ignoreCase = true)) Sunny
+                else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.rainy), ignoreCase = true)) Rainy
+                else Cloudy, contentColor = MaterialTheme.colors.secondary, tonalElevation = 2.dp) {
+                    Constants.navScreens.forEachIndexed { index, item ->
+                        NavigationBarItem(selected = selectedItemIndex == index,
+                            onClick = { selectedItemIndex = index
+                                when (index) {
+                                    0 -> {}
+                                    1 -> navController.navigate(WeatherAppNavScreens.SearchScreen.name){ launchSingleTop = true }
+                                }
+                            },
+                            label = { androidx.compose.material.Text(text = item.title, style = TextStyle(fontSize = 12.sp, textAlign = TextAlign.Center, color = MaterialTheme.colors.secondary, fontWeight = if (index == selectedItemIndex) FontWeight.ExtraBold else FontWeight.Bold)) },
+                            alwaysShowLabel = true, icon = { Icon(tint = if (index == selectedItemIndex) Color.White else MaterialTheme.colors.secondary, imageVector = if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon, contentDescription = item.title) },
+                            colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colors.secondary)
+                        )
+                    }
                 }
-            }
-            Row(modifier = Modifier.fillMaxWidth().weight(0.2f).background(color =
-            if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.clear), ignoreCase = true)) Sunny
-            else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.rainy), ignoreCase = true)) Rainy
-            else Cloudy), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically){
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(text = "${"%.0f".format(convertTemperature(weather.value.main!!.temp_min!!))} \u00B0C", color = Color.White)
-                    Text(text = "min", color = Color.White)
-                }
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(text = "${"%.0f".format(convertTemperature(weather.value.main?.temp!!))} \u00B0C", color = Color.White)
-                    Text(text = "Current", color = Color.White)
-                }
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(text = "${"%.0f".format(convertTemperature(weather.value.main?.temp_max!!))} \u00B0C", color = Color.White)
-                    Text(text = "max", color = Color.White)
-                }
-            }
-            Divider(color = Color.White, thickness = 2.dp)
-            Column(modifier = Modifier.fillMaxWidth().weight(1f).background(color =
-            if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.clear), ignoreCase = true)) Sunny
-            else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.rainy), ignoreCase = true)) Rainy
-            else Cloudy).padding(top = 14.dp)){
-                LazyColumn(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(getWeekDays().size) { i ->
-                        Row(modifier = Modifier.fillMaxWidth().padding(end = 14.dp, start = 14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly){
-                            Text(modifier = Modifier.weight(1f), text = getWeekDays()[i], style = TextStyle(textAlign = TextAlign.Start, fontSize = 18.sp, color = Color.White))
-                            Image(modifier = Modifier.weight(1f), painter = painterResource(id = getWeatherIcon(weatherList[i].weather!![0].icon!!)), contentDescription = null)
-                            Text(modifier = Modifier.weight(1f).padding(end = 12.dp), text = "${"%.0f".format(convertTemperature(weatherList[i].main?.temp!!))} \u00B0C", style = TextStyle(textAlign = TextAlign.End, fontSize = 18.sp, color = Color.White))
+            }){
+            Box(modifier = Modifier.fillMaxSize().padding(0.dp)){
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = with (Modifier){ fillMaxSize().weight(0.65f).paint(painterResource(id =
+                    if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.clear), ignoreCase = true)) R.drawable.forest_sunny
+                    else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.rainy), ignoreCase = true)) R.drawable.forest_rainy
+                    else R.drawable.forest_cloudy
+                    ), contentScale = ContentScale.FillBounds) }){
+                        Column(modifier = Modifier.align(Alignment.Center),verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                            Text(text = "${"%.0f".format(convertTemperature(weather.value.main?.temp!!))} \u00B0C", style = TextStyle(fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White))
+                            Text(text = weather.value.weather?.get(0)?.description!!, style = TextStyle(fontSize = 22.sp, color = Color.White))
+                        }
+                    }
+                    Row(modifier = Modifier.fillMaxWidth().weight(0.2f).background(color =
+                    if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.clear), ignoreCase = true)) Sunny
+                    else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.rainy), ignoreCase = true)) Rainy
+                    else Cloudy), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically){
+                        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                            Text(text = "${"%.0f".format(convertTemperature(weather.value.main!!.temp_min!!))} \u00B0C", color = Color.White)
+                            Text(text = "min", color = Color.White)
+                        }
+                        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                            Text(text = "${"%.0f".format(convertTemperature(weather.value.main?.temp!!))} \u00B0C", color = Color.White)
+                            Text(text = "Current", color = Color.White)
+                        }
+                        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                            Text(text = "${"%.0f".format(convertTemperature(weather.value.main?.temp_max!!))} \u00B0C", color = Color.White)
+                            Text(text = "max", color = Color.White)
+                        }
+                    }
+                    Divider(color = Color.White, thickness = 2.dp)
+                    Column(modifier = Modifier.fillMaxWidth().weight(1.35f).background(color =
+                    if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.clear), ignoreCase = true)) Sunny
+                    else if(backgroundColorChanger(weather.value.weather?.get(0)?.icon!!).contains(stringResource(id = R.string.rainy), ignoreCase = true)) Rainy
+                    else Cloudy).padding(top = 14.dp, bottom = 60.dp)){
+                        LazyColumn(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(getWeekDays().size) { i ->
+                                Row(modifier = Modifier.fillMaxWidth().padding(end = 14.dp, start = 14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly){
+                                    Text(modifier = Modifier.weight(1f), text = getWeekDays()[i], style = TextStyle(textAlign = TextAlign.Start, fontSize = 18.sp, color = Color.White))
+                                    Image(modifier = Modifier.weight(1f), painter = painterResource(id = getWeatherIcon(weatherList[i].weather!![0].icon!!)), contentDescription = null)
+                                    Text(modifier = Modifier.weight(1f).padding(end = 12.dp), text = "${"%.0f".format(convertTemperature(weatherList[i].main?.temp!!))} \u00B0C", style = TextStyle(textAlign = TextAlign.End, fontSize = 18.sp, color = Color.White))
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-    }
 }

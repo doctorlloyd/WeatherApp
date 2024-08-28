@@ -9,7 +9,7 @@ import com.lloyd.weatherapp.data.local.WeatherDao
 import com.lloyd.weatherapp.data.local.WeatherDatabase
 import com.lloyd.weatherapp.data.remote.WeatherApiService
 import com.lloyd.weatherapp.models.remote.location.DefaultLocationTracker
-import com.lloyd.weatherapp.repository.WeatherAppRepository
+import com.lloyd.weatherapp.repository.remote.WeatherAppRepository
 import com.lloyd.weatherapp.utils.location.LocationTracker
 import dagger.Module
 import dagger.Provides

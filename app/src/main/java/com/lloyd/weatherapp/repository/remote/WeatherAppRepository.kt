@@ -1,4 +1,4 @@
-package com.lloyd.weatherapp.repository
+package com.lloyd.weatherapp.repository.remote
 
 import com.lloyd.weatherapp.data.remote.WeatherApiService
 import com.lloyd.weatherapp.models.remote.forecast.Weather
