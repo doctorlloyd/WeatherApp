@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.lloyd.weatherapp.R
 import com.lloyd.weatherapp.models.remote.forecast.Weather
 import com.lloyd.weatherapp.screens.home.HomeViewModel
@@ -57,6 +56,7 @@ fun CustomSearchViewRight(placeholder: String, search: String, modifier: Modifie
                                         is DataState.Success -> {
                                             if (it.data.main?.temp!! > 0){
                                                 addLocalWeather(weather = it.data, searchScreenViewModel = searchScreenViewModel)
+                                                weather(it.data)
                                             } else cityNotFound.value = true
                                         }
                                         is DataState.Loading -> {}

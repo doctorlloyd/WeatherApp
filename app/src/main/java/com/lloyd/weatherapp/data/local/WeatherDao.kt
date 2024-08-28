@@ -11,7 +11,7 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.NONE)
     suspend fun insertWeather(localWeather: LocalWeather): Long
 
-    @Query("SELECT * from weather_tbl")
+    @Query("SELECT * from weather_tbl ORDER BY dt_txt DESC")
     fun getListOfRecentlySearchedWeather(): List<LocalWeather>?
 
     @Query("DELETE FROM weather_tbl")
